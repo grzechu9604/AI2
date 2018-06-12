@@ -4,24 +4,69 @@ using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using AILibrary.Models;
+using SendGrid.Helpers.Mail;
+using System.Net;
+using System.Configuration;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Net.Mail;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Net.Mail;
+using System.Net.Mime;
 
 namespace AILibrary
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            await configSendGridasync(message);
+        }
+
+        // Use NuGet to install SendGrid (Basic C# client lib) 
+        private async Task configSendGridasync(IdentityMessage message)
+        {
+            try
+            {
+                MailMessage mailMsg = new MailMessage();
+
+                // To
+                mailMsg.To.Add(new MailAddress(message.Destination, message.Destination));
+
+                // From
+                mailMsg.From = new MailAddress(ConfigurationManager.AppSettings["mailAccount"], ConfigurationManager.AppSettings["mailName"]);
+
+                // Subject and multipart/alternative Body
+                mailMsg.Subject = message.Subject;
+                mailMsg.Body = message.Body;
+                mailMsg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(message.Body, null, MediaTypeNames.Text.Plain));
+                mailMsg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(message.Body, null, MediaTypeNames.Text.Html));
+
+                // Init SmtpClient and send
+                SmtpClient smtpClient = new SmtpClient(ConfigurationManager.AppSettings["smtpClientAddress"], Convert.ToInt32(ConfigurationManager.AppSettings["smtpClientPort"]));
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["mailAccount"], ConfigurationManager.AppSettings["mailPassword"]);
+                smtpClient.EnableSsl = true;
+                
+                await Task.Run(() => smtpClient.Send(mailMsg));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                await Task.FromResult(0);
+            }
         }
     }
+
 
     public class SmsService : IIdentityMessageService
     {
