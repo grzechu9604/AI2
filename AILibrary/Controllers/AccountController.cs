@@ -74,9 +74,19 @@ namespace AILibrary.Controllers
                 return View(model);
             }
 
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                {
+                    return await RedirectToInfo(TextElements.VeryfyMailMessage, TextElements.VeryfyMailTitle, TextElements.VeryfyMailHeader);
+                }
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -163,12 +173,8 @@ namespace AILibrary.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    
-                    Session[MyConstants.VBMessage] = "Please check Your email and cofirm it. You must confirm it before you log in.";
-                    Session[MyConstants.VBTitle] = "Confirm your email";
-                    Session[MyConstants.VBHeader] = "Thank you";
-
-                    return View("Info");
+                   
+                    return await RedirectToInfo(TextElements.MailConfirmationMessage, TextElements.MailConfirmationTitle, TextElements.MailConfirmationHeader);
                 }
                 AddErrors(result);
             }
@@ -484,6 +490,15 @@ namespace AILibrary.Controllers
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
+        }
+
+        private async Task<ActionResult> RedirectToInfo(string message, string title, string header)
+        {
+            Session[MyConstants.VBMessage] = message;
+            Session[MyConstants.VBTitle] = title;
+            Session[MyConstants.VBHeader] = header;
+
+            return View("Info");
         }
         #endregion
     }
