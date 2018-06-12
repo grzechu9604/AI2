@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using AILibrary.Models;
+using AILibrary.Views.Helpers;
 
 namespace AILibrary.Controllers
 {
@@ -162,8 +163,12 @@ namespace AILibrary.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    
+                    Session[MyConstants.VBMessage] = "Please check Your email and cofirm it. You must confirm it before you log in.";
+                    Session[MyConstants.VBTitle] = "Confirm your email";
+                    Session[MyConstants.VBHeader] = "Thank you";
 
-                    return RedirectToAction("Index", "Home");
+                    return View("Info");
                 }
                 AddErrors(result);
             }
