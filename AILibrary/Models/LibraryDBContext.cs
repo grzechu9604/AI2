@@ -10,6 +10,10 @@ namespace AILibrary.Models
 {
     public class LibraryDBContext : DbContext
     {
+        public LibraryDBContext() : base("DefaultConnection")
+        {
+        }
+
         public DbSet<Book> Books { get; set; }
         public DbSet<BookCopy> BookCopies { get; set; }
         public DbSet<Library> Libraries { get; set; }

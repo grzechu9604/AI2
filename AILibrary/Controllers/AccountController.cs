@@ -203,6 +203,12 @@ namespace AILibrary.Controllers
             }
 
             var result = await UserManager.ConfirmEmailAsync(userId, code);
+
+            if (result.Succeeded)
+            {
+                new LibrariesController().CreateLibraryOnUserCreation(userId);
+            }
+
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
