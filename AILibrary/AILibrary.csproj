@@ -208,7 +208,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Books\Book.cs" />
+    <Compile Include="Models\Books\BookCopy.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Libraries\Library.cs" />
+    <Compile Include="Models\LibraryDBContext.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
