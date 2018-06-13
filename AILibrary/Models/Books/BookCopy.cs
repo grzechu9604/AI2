@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AILibrary.Models.Libraries;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -11,7 +13,9 @@ namespace AILibrary.Models.Books
         private Book _book;
         private string _possesorId;
         private string _currentlyPossesdByUserId;
+        private Library _library;
 
+        [Required]
         public Book Book
         {
             get
@@ -25,6 +29,7 @@ namespace AILibrary.Models.Books
             }
         }
 
+        [Required]
         public string PossesorId
         {
             get
@@ -61,6 +66,19 @@ namespace AILibrary.Models.Books
             set
             {
                 _id = value;
+            }
+        }
+
+        public Library Library
+        {
+            get
+            {
+                return _library;
+            }
+
+            set
+            {
+                _library = value;
             }
         }
 

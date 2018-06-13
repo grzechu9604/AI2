@@ -13,7 +13,7 @@ namespace AILibrary.Controllers
 {
     public class LibrariesController : Controller
     {
-        private LibraryDBContext db = new LibraryDBContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Libraries
         [Authorize]
@@ -66,9 +66,10 @@ namespace AILibrary.Controllers
 
         public void CreateLibraryOnUserCreation(string userId)
         {
-            var library = new Library(userId);
             if (ModelState.IsValid)
             {
+                var library = new Library();
+                library.Possesor = db.Users.First(u => u.Id.Equals(userId));
                 db.Libraries.Add(library);
                 db.SaveChanges();
             }

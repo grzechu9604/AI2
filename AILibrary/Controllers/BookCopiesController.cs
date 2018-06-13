@@ -13,7 +13,7 @@ namespace AILibrary.Controllers
 {
     public class BookCopiesController : Controller
     {
-        private LibraryDBContext db = new LibraryDBContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BookCopies
         public ActionResult Index()

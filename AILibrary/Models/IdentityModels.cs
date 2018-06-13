@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using AILibrary.Models.Books;
+using AILibrary.Models.Libraries;
 
 namespace AILibrary.Models
 {
@@ -29,5 +31,9 @@ namespace AILibrary.Models
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Book> Books { get; set; }
+        public DbSet<BookCopy> BookCopies { get; set; }
+        public DbSet<Library> Libraries { get; set; }
     }
 }

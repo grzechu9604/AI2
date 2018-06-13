@@ -15,7 +15,7 @@ namespace AILibrary.Controllers
 {
     public class BooksController : Controller
     {
-        private LibraryDBContext db = new LibraryDBContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Books
         [Authorize]

@@ -1,6 +1,7 @@
 ﻿using AILibrary.Models.Books;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,19 +10,20 @@ namespace AILibrary.Models.Libraries
     public class Library
     {
         private long _id;
-        private string _possesorId;
+        private ApplicationUser _possesor;
         private List<BookCopy> _books;
 
-        public string PossesorId
+        [Required]
+        public ApplicationUser Possesor
         {
             get
             {
-                return _possesorId;
+                return _possesor;
             }
 
             set
             {
-                _possesorId = value;
+                _possesor = value;
             }
         }
 
@@ -49,12 +51,6 @@ namespace AILibrary.Models.Libraries
             {
                 _id = value;
             }
-        }
-
-        public Library(string _possesorId)
-        {
-            this.PossesorId = _possesorId;
-            this.Books = new List<BookCopy>();
         }
 
         public Library()

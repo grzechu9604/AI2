@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -20,6 +21,7 @@ namespace AILibrary.Models.Books
             this.Title = _title;
         }
 
+        [Required]
         public string AuthorName
         {
             get
@@ -33,6 +35,7 @@ namespace AILibrary.Models.Books
             }
         }
 
+        [Required]
         public string Title
         {
             get
