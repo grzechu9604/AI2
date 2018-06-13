@@ -196,6 +196,12 @@ namespace AILibrary.Controllers
             {
                 return View("Error");
             }
+
+            if (UserManager.IsEmailConfirmed(userId))
+            {
+                return await RedirectToInfo(TextElements.AlreadyVeryfiedMailMessage, TextElements.AlreadyVeryfiedMailTitle, TextElements.AlreadyVeryfiedMailHeader);
+            }
+
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
