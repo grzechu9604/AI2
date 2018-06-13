@@ -11,6 +11,9 @@ namespace AILibrary.Models.Books
         private string _authorName;
         private string _title;
 
+        public Book()
+        { }
+
         public Book(string _authorName, string _title)
         {
             this.AuthorName = _authorName;
@@ -54,6 +57,13 @@ namespace AILibrary.Models.Books
             {
                 _id = value;
             }
+        }
+
+        public override bool Equals(object o)
+        {
+            return o != null && o is Book 
+                && (o as Book).AuthorName.Equals(AuthorName) 
+                && (o as Book).Title.Equals(Title);
         }
     }
 }

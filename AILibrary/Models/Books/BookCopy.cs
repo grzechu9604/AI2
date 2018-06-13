@@ -70,5 +70,8 @@ namespace AILibrary.Models.Books
             this.PossesorId = _possesorId;
             this.CurrentlyPossesdByUserId = _currentlyPossesdByUserId;
         }
+
+        public BookCopy()
+        { }
     }
 }

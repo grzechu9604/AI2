@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using AILibrary.Models;
 using AILibrary.Models.Books;
+using AILibrary.Constants;
+using AILibrary.Views.Helpers;
 
 namespace AILibrary.Controllers
 {
@@ -16,12 +18,14 @@ namespace AILibrary.Controllers
         private LibraryDBContext db = new LibraryDBContext();
 
         // GET: Books
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.Books.ToList());
         }
 
         // GET: Books/Details/5
+        [Authorize]
         public ActionResult Details(long? id)
         {
             if (id == null)
@@ -37,6 +41,7 @@ namespace AILibrary.Controllers
         }
 
         // GET: Books/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -47,19 +52,23 @@ namespace AILibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "Id,AuthorName,Title")] Book book)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !IsSameInDB(book))
             {
                 db.Books.Add(book);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
+            Session[SessionKeys.SKBookAlreadyInDB] = TextElements.BookAlreadyInDB;
+
             return View(book);
         }
 
         // GET: Books/Edit/5
+        [Authorize]
         public ActionResult Edit(long? id)
         {
             if (id == null)
@@ -79,6 +88,7 @@ namespace AILibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "Id,AuthorName,Title")] Book book)
         {
             if (ModelState.IsValid)
@@ -91,6 +101,7 @@ namespace AILibrary.Controllers
         }
 
         // GET: Books/Delete/5
+        [Authorize]
         public ActionResult Delete(long? id)
         {
             if (id == null)
@@ -108,6 +119,7 @@ namespace AILibrary.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(long id)
         {
             Book book = db.Books.Find(id);
@@ -123,6 +135,13 @@ namespace AILibrary.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public bool IsSameInDB(Book book)
+        {
+            return db.Books.Any(bookInDB => 
+            book.AuthorName.Equals(bookInDB.AuthorName) 
+            && book.Title.Equals(bookInDB.Title));
         }
     }
 }

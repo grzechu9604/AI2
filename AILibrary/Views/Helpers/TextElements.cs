@@ -18,5 +18,7 @@ namespace AILibrary.Views.Helpers
         public static string VeryfyMailTitle = "Mail not verified";
         public static string VeryfyMailHeader = "Mail not verified";
         public static string VeryfyMailMessage = "Your mail is not veryfied. You are not allowed to use service.";
+
+        public static string BookAlreadyInDB = "This book is already in database and you cannot add another one";
     }
 }

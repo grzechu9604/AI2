@@ -56,5 +56,8 @@ namespace AILibrary.Models.Libraries
             this.PossesorId = _possesorId;
             this.Books = new List<BookCopy>();
         }
+
+        public Library()
+        { }
     }
 }
