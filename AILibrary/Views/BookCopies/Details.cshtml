@@ -1,0 +1,35 @@
+﻿@model AILibrary.Models.Books.BookCopy
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BookCopy</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PossesorId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PossesorId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentlyPossesdByUserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentlyPossesdByUserId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
