@@ -11,8 +11,8 @@ namespace AILibrary.Views.Helpers
         public static string MailConfirmationTitle = "Confirm your email";
         public static string MailConfirmationHeader = "Thank you";
 
-        public static string VeryfyMailTitle = "Title";
-        public static string VeryfyMailHeader = "Header";
-        public static string VeryfyMailMessage = "Message";
+        public static string VeryfyMailTitle = "Mail not verified";
+        public static string VeryfyMailHeader = "Mail not verified";
+        public static string VeryfyMailMessage = "Your mail is not veryfied. You are not allowed to use service.";
     }
 }
