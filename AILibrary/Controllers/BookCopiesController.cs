@@ -23,19 +23,19 @@ namespace AILibrary.Controllers
             var userId = HttpContext.User.Identity.GetUserId();
             return  db.Users.Find(userId);
         }
-
-        //private public List<Book> BooksSelectElements() => db.Books.Select(book => new SelectListItem { Text = book.AuthorName + " " + book.Title, Value = book.Id.ToString()});
-
+        
         private IQueryable<SelectListItem> BooksSelectElements() => db.Books.Select(book => new SelectListItem { Text = book.AuthorName + " " + book.Title, Value = book.Id.ToString() });
 
 
         // GET: BookCopies
+        [Authorize]
         public ActionResult Index()
         {
             return View(BookCopiesWithIncludes());
         }
 
         // GET: BookCopies/Details/5
+        [Authorize]
         public ActionResult Details(long? id)
         {
             if (id == null)
@@ -52,6 +52,7 @@ namespace AILibrary.Controllers
         }
 
         // GET: BookCopies/Create
+        [Authorize]
         public ActionResult Create()
         {
             AddToViewDataPreparedBooksDropDownList(null);
@@ -63,6 +64,7 @@ namespace AILibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "Id,AmountOfPages")] BookCopy bookCopy)
         {
             SetBook(bookCopy);
@@ -80,6 +82,7 @@ namespace AILibrary.Controllers
         }
 
         // GET: BookCopies/Edit/5
+        [Authorize]
         public ActionResult Edit(long? id)
         {
             if (id == null)
@@ -99,6 +102,7 @@ namespace AILibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "Id,PossesorId,CurrentlyPossesdByUserId,AmountOfPages")] BookCopy bookCopy)
         {
             var editingEntry = BookCopiesWithIncludes().First(e => e.Id == bookCopy.Id);
@@ -116,6 +120,7 @@ namespace AILibrary.Controllers
         }
 
         // GET: BookCopies/Delete/5
+        [Authorize]
         public ActionResult Delete(long? id)
         {
             if (id == null)
@@ -134,6 +139,7 @@ namespace AILibrary.Controllers
         // POST: BookCopies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(long id)
         {
             BookCopy bookCopy = db.BookCopies.Find(id);
