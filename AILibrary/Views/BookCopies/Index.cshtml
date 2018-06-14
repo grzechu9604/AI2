@@ -18,6 +18,9 @@
         <th>
             @Html.DisplayNameFor(model => model.CurrentlyPossesdByUserId)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AmountOfPages)
+        </th>
         <th></th>
     </tr>
 
@@ -28,6 +31,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CurrentlyPossesdByUserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AmountOfPages)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

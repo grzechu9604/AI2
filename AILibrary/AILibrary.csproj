@@ -211,6 +211,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Books\Book.cs" />
     <Compile Include="Models\Books\BookCopy.cs" />
@@ -291,16 +292,16 @@
     <Content Include="Views\Libraries\Details.cshtml" />
     <Content Include="Views\Libraries\Edit.cshtml" />
     <Content Include="Views\Libraries\Index.cshtml" />
-    <Content Include="Views\BookCopies\Create.cshtml" />
-    <Content Include="Views\BookCopies\Delete.cshtml" />
-    <Content Include="Views\BookCopies\Details.cshtml" />
-    <Content Include="Views\BookCopies\Edit.cshtml" />
-    <Content Include="Views\BookCopies\Index.cshtml" />
     <Content Include="Views\Books\Create.cshtml" />
     <Content Include="Views\Books\Delete.cshtml" />
     <Content Include="Views\Books\Details.cshtml" />
     <Content Include="Views\Books\Edit.cshtml" />
     <Content Include="Views\Books\Index.cshtml" />
+    <Content Include="Views\BookCopies\Create.cshtml" />
+    <Content Include="Views\BookCopies\Delete.cshtml" />
+    <Content Include="Views\BookCopies\Details.cshtml" />
+    <Content Include="Views\BookCopies\Edit.cshtml" />
+    <Content Include="Views\BookCopies\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

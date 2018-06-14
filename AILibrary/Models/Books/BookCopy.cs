@@ -14,6 +14,9 @@ namespace AILibrary.Models.Books
         private string _possesorId;
         private string _currentlyPossesdByUserId;
         private Library _library;
+        private long _amountOfPages;
+
+
 
         [Required]
         public Book Book
@@ -82,11 +85,18 @@ namespace AILibrary.Models.Books
             }
         }
 
-        public BookCopy(Book _book, string _possesorId, string _currentlyPossesdByUserId)
+        [Required]
+        public long AmountOfPages
         {
-            this.Book = _book;
-            this.PossesorId = _possesorId;
-            this.CurrentlyPossesdByUserId = _currentlyPossesdByUserId;
+            get
+            {
+                return _amountOfPages;
+            }
+
+            set
+            {
+                _amountOfPages = value;
+            }
         }
 
         public BookCopy()

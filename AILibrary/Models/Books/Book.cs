@@ -61,12 +61,5 @@ namespace AILibrary.Models.Books
                 _id = value;
             }
         }
-
-        public override bool Equals(object o)
-        {
-            return o != null && o is Book 
-                && (o as Book).AuthorName.Equals(AuthorName) 
-                && (o as Book).Title.Equals(Title);
-        }
     }
 }

@@ -15,6 +15,9 @@ namespace AILibrary.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public IQueryable<SelectListItem> BooksSelectElements() => db.Books.Select(book => new SelectListItem { Text = book.AuthorName + " " + book.Title, Value = book.Id.ToString()});
+        
+
         // GET: BookCopies
         public ActionResult Index()
         {
@@ -39,6 +42,7 @@ namespace AILibrary.Controllers
         // GET: BookCopies/Create
         public ActionResult Create()
         {
+            ViewData["Book"] = BooksSelectElements();
             return View();
         }
 
@@ -47,7 +51,7 @@ namespace AILibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,PossesorId,CurrentlyPossesdByUserId")] BookCopy bookCopy)
+        public ActionResult Create([Bind(Include = "Id,PossesorId,CurrentlyPossesdByUserId,AmountOfPages")] BookCopy bookCopy)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +83,7 @@ namespace AILibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,PossesorId,CurrentlyPossesdByUserId")] BookCopy bookCopy)
+        public ActionResult Edit([Bind(Include = "Id,PossesorId,CurrentlyPossesdByUserId,AmountOfPages")] BookCopy bookCopy)
         {
             if (ModelState.IsValid)
             {
