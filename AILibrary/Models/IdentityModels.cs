@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using AILibrary.Models.Books;
 using AILibrary.Models.Libraries;
+using AILibrary.Models.Permissions;
 
 namespace AILibrary.Models
 {
@@ -35,5 +36,6 @@ namespace AILibrary.Models
         public DbSet<Book> Books { get; set; }
         public DbSet<BookCopy> BookCopies { get; set; }
         public DbSet<Library> Libraries { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
     }
 }
