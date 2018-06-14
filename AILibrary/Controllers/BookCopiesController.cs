@@ -42,7 +42,7 @@ namespace AILibrary.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BookCopy bookCopy = db.BookCopies.Find(id);
+            BookCopy bookCopy = BookCopiesWithIncludes().First(b => b.Id == id);
             if (bookCopy == null)
             {
                 return HttpNotFound();
@@ -86,7 +86,7 @@ namespace AILibrary.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BookCopy bookCopy = db.BookCopies.Find(id);
+            BookCopy bookCopy = BookCopiesWithIncludes().First(b => b.Id == id);
             if (bookCopy == null)
             {
                 return HttpNotFound();
@@ -101,13 +101,17 @@ namespace AILibrary.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,PossesorId,CurrentlyPossesdByUserId,AmountOfPages")] BookCopy bookCopy)
         {
+            var editingEntry = BookCopiesWithIncludes().First(e => e.Id == bookCopy.Id);
+            editingEntry.AmountOfPages = bookCopy.AmountOfPages;
+            ClearModelState();
+
             if (ModelState.IsValid)
             {
-                db.Entry(bookCopy).State = EntityState.Modified;
+                db.Entry(editingEntry).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            AddToViewDataPreparedBooksDropDownList(bookCopy);
+
             return View(bookCopy);
         }
 
@@ -118,7 +122,7 @@ namespace AILibrary.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BookCopy bookCopy = db.BookCopies.Find(id);
+            BookCopy bookCopy = BookCopiesWithIncludes().First(b => b.Id == id);
             if (bookCopy == null)
             {
                 return HttpNotFound();
@@ -172,12 +176,27 @@ namespace AILibrary.Controllers
             ModelState.Remove("Book");
         }
 
+        private void RestoreBook(BookCopy b)
+        {
+            ApplicationDbContext duplicateContext = new ApplicationDbContext();
+            var bookId = duplicateContext.BookCopies.Include(bookCopy => bookCopy.Book).First(bookCopy => bookCopy.Id.Equals(b.Id)).Book.Id;
+            duplicateContext.Dispose();
+            b.Book = db.Books.Find(bookId);
+            ModelState.Remove("Book");
+        }
+
         private IQueryable<BookCopy> BookCopiesWithIncludes()
         {
             return db.BookCopies
                 .Include(b => b.Book)
                 .Include(b => b.CurrentlyPossesdByUser)
                 .Include(b => b.Possesor);
+        }
+
+        private void ClearModelState()
+        {
+            ModelState.Remove("Book");
+            ModelState.Remove("Possesor");
         }
     }
 }

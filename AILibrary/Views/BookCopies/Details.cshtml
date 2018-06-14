@@ -16,7 +16,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Possesor)
+            @Html.DisplayFor(model => model.Possesor.Email)
         </dd>
 
         <dt>
@@ -24,7 +24,23 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CurrentlyPossesdByUser)
+            @Html.DisplayFor(model => model.CurrentlyPossesdByUser.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.AuthorName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book.AuthorName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Book.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Book.Title)
         </dd>
 
         <dt>

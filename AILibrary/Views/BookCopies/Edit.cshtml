@@ -16,22 +16,39 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Possesor)
+            </dt>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Possesor, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Possesor, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Possesor, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <dd>
+                @Html.DisplayFor(model => model.Possesor.Email)
+            </dd>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CurrentlyPossesdByUser, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CurrentlyPossesdByUser, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CurrentlyPossesdByUser, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <dt>
+                @Html.DisplayNameFor(model => model.CurrentlyPossesdByUser)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CurrentlyPossesdByUser.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Book.AuthorName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Book.AuthorName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Book.Title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Book.Title)
+            </dd>
+        </dl>
 
         <div class="form-group">
             @Html.LabelFor(model => model.AmountOfPages, htmlAttributes: new { @class = "control-label col-md-2" })
