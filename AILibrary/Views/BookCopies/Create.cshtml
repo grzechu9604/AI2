@@ -3,15 +3,17 @@
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string BooksDDLElements = "BooksList";
+    string BooksDDLOnFormName = "BooksDDL";
 }
 
 @{
-    var selectList = new SelectList(
-        new List<SelectListItem>
-        {   
-            new SelectListItem {Text = "Google", Value = "Google"},
-            new SelectListItem {Text = "Other", Value = "Other"},
-        }, "Value", "Text");
+    SelectList selectBookList = null;
+    if (ViewData[BooksDDLElements] != null)
+    {
+        selectBookList = new SelectList(
+            (IList<SelectListItem>)ViewData[BooksDDLElements], "Value", "Text");
+    }
 }
 
 <h2>Create</h2>
@@ -28,7 +30,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Book, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Book, (IQueryable<SelectListItem>)ViewData["Book"])
+                @Html.DropDownList(BooksDDLOnFormName, selectBookList)
                 @*@Html.ValidationMessageFor(model => model.Book, "", new { @class = "text-danger" })*@
             </div>
         </div>

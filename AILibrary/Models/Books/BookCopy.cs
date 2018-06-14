@@ -1,6 +1,7 @@
 ﻿using AILibrary.Models.Libraries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -11,14 +12,13 @@ namespace AILibrary.Models.Books
     {
         private long _id;
         private Book _book;
-        private string _possesorId;
-        private string _currentlyPossesdByUserId;
+        private ApplicationUser _possesor;
+        private ApplicationUser _currentlyPossesdByUser;
         private Library _library;
         private long _amountOfPages;
 
-
-
         [Required]
+        [DisplayName("Book")]
         public Book Book
         {
             get
@@ -33,29 +33,31 @@ namespace AILibrary.Models.Books
         }
 
         [Required]
-        public string PossesorId
+        [DisplayName("Owner")]
+        public ApplicationUser Possesor
         {
             get
             {
-                return _possesorId;
+                return _possesor;
             }
 
             set
             {
-                _possesorId = value;
+                _possesor = value;
             }
         }
 
-        public string CurrentlyPossesdByUserId
+        [DisplayName("Currently possesed by")]
+        public ApplicationUser CurrentlyPossesdByUser
         {
             get
             {
-                return _currentlyPossesdByUserId;
+                return _currentlyPossesdByUser;
             }
 
             set
             {
-                _currentlyPossesdByUserId = value;
+                _currentlyPossesdByUser = value;
             }
         }
 
@@ -86,6 +88,7 @@ namespace AILibrary.Models.Books
         }
 
         [Required]
+        [DisplayName("Amount of pages")]
         public long AmountOfPages
         {
             get

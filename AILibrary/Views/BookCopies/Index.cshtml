@@ -13,10 +13,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.PossesorId)
+            @Html.DisplayNameFor(model => model.Possesor)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CurrentlyPossesdByUserId)
+            @Html.DisplayNameFor(model => model.CurrentlyPossesdByUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Book.AuthorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Book.Title)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.AmountOfPages)
@@ -27,10 +33,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.PossesorId)
+            @Html.DisplayFor(modelItem => item.Possesor.Email)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CurrentlyPossesdByUserId)
+            @Html.DisplayFor(modelItem => item.CurrentlyPossesdByUser.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Book.AuthorName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Book.Title)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.AmountOfPages)

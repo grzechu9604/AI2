@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using AILibrary.Models;
 using AILibrary.Models.Books;
 
@@ -13,15 +14,25 @@ namespace AILibrary.Controllers
 {
     public class BookCopiesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        public static string BooksDDLElements = "BooksList";
+        public static string BooksDDLOnFormName = "BooksDDL";
 
-        public IQueryable<SelectListItem> BooksSelectElements() => db.Books.Select(book => new SelectListItem { Text = book.AuthorName + " " + book.Title, Value = book.Id.ToString()});
-        
+        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUser GetCurrentUser()
+        {
+            var userId = HttpContext.User.Identity.GetUserId();
+            return  db.Users.Find(userId);
+        }
+
+        //private public List<Book> BooksSelectElements() => db.Books.Select(book => new SelectListItem { Text = book.AuthorName + " " + book.Title, Value = book.Id.ToString()});
+
+        private IQueryable<SelectListItem> BooksSelectElements() => db.Books.Select(book => new SelectListItem { Text = book.AuthorName + " " + book.Title, Value = book.Id.ToString() });
+
 
         // GET: BookCopies
         public ActionResult Index()
         {
-            return View(db.BookCopies.ToList());
+            return View(BookCopiesWithIncludes());
         }
 
         // GET: BookCopies/Details/5
@@ -36,13 +47,14 @@ namespace AILibrary.Controllers
             {
                 return HttpNotFound();
             }
+            AddToViewDataPreparedBooksDropDownList(bookCopy);
             return View(bookCopy);
         }
 
         // GET: BookCopies/Create
         public ActionResult Create()
         {
-            ViewData["Book"] = BooksSelectElements();
+            AddToViewDataPreparedBooksDropDownList(null);
             return View();
         }
 
@@ -51,15 +63,19 @@ namespace AILibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,PossesorId,CurrentlyPossesdByUserId,AmountOfPages")] BookCopy bookCopy)
+        public ActionResult Create([Bind(Include = "Id,AmountOfPages")] BookCopy bookCopy)
         {
+            SetBook(bookCopy);
+            SetOwnerData(bookCopy);
+            
+            
             if (ModelState.IsValid)
             {
                 db.BookCopies.Add(bookCopy);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            AddToViewDataPreparedBooksDropDownList(bookCopy);
             return View(bookCopy);
         }
 
@@ -91,6 +107,7 @@ namespace AILibrary.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            AddToViewDataPreparedBooksDropDownList(bookCopy);
             return View(bookCopy);
         }
 
@@ -106,6 +123,7 @@ namespace AILibrary.Controllers
             {
                 return HttpNotFound();
             }
+            AddToViewDataPreparedBooksDropDownList(bookCopy);
             return View(bookCopy);
         }
 
@@ -127,6 +145,39 @@ namespace AILibrary.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void AddToViewDataPreparedBooksDropDownList(BookCopy bc)
+        {
+            var selectList = BooksSelectElements().ToList();
+            var selectedBook = selectList.FirstOrDefault(book => book.Value.Equals(bc?.Book?.Id.ToString()));
+            if (selectedBook!=null)
+            {
+                selectedBook.Selected = true;
+            }
+            ViewData[BooksDDLElements] = selectList;
+        }
+
+        private void SetOwnerData(BookCopy b)
+        {
+            b.Possesor = GetCurrentUser();
+            b.Library = db.Libraries.FirstOrDefault(l => l.Possesor.Id == b.Possesor.Id);
+            ModelState.Remove("Possesor");
+        }
+
+        private void SetBook(BookCopy b)
+        {
+            long bookId = Convert.ToInt64(Request.Form[BooksDDLOnFormName]);
+            b.Book = db.Books.Find(bookId);
+            ModelState.Remove("Book");
+        }
+
+        private IQueryable<BookCopy> BookCopiesWithIncludes()
+        {
+            return db.BookCopies
+                .Include(b => b.Book)
+                .Include(b => b.CurrentlyPossesdByUser)
+                .Include(b => b.Possesor);
         }
     }
 }
