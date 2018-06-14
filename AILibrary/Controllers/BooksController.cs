@@ -19,9 +19,29 @@ namespace AILibrary.Controllers
 
         // GET: Books
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder)
         {
-            return View(db.Books.ToList());
+            ViewBag.TitleSortParam = string.IsNullOrWhiteSpace(sortOrder) ? "title_desc" : "";
+            ViewBag.AuthorSortParam = sortOrder == "author" ? "author_desc" : "author";
+            var books = db.Books.Select(b => b);
+
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    books = books.OrderByDescending(b => b.Title);
+                    break;
+                case "author":
+                    books = books.OrderBy(b => b.AuthorName);
+                    break;
+                case "author_desc":
+                    books = books.OrderByDescending(b => b.AuthorName);
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Title);
+                    break;
+            }
+
+            return View(books.ToList());
         }
 
         // GET: Books/Details/5

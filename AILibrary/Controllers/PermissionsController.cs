@@ -22,9 +22,23 @@ namespace AILibrary.Controllers
 
         // GET: Permissions
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder)
         {
-            return View(PermissionsWithIncludes());
+            ViewBag.MailSortParam = string.IsNullOrWhiteSpace(sortOrder) ? "mail_desc" : "";
+
+            var permissions = PermissionsWithIncludes().Select(p => p);
+
+            switch (sortOrder)
+            {
+                case "mail_desc":
+                    permissions = permissions.OrderByDescending(b => b.User.Email);
+                    break;
+                default:
+                    permissions = permissions.OrderBy(b => b.User.Email);
+                    break;
+            }
+
+            return View(permissions);
         }
 
         // GET: Permissions/Create

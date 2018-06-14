@@ -13,10 +13,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AuthorName)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.AuthorName).ToString(), "Index", new { sortOrder = ViewBag.AuthorSortParam })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.ActionLink(@Html.DisplayNameFor(model => model.Title).ToString(), "Index", new { sortOrder = ViewBag.TitleSortParam })
         </th>
         <th></th>
     </tr>

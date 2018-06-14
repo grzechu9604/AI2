@@ -13,21 +13,20 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Possesor)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Possesor).ToString(), "Index", new { sortOrder = ViewBag.PossesorSortParam })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CurrentlyPossesdByUser)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.CurrentlyPossesdByUser).ToString(), "Index", new { sortOrder = ViewBag.CurrentlyPossesed })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Book.AuthorName)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Book.AuthorName).ToString(), "Index", new { sortOrder = ViewBag.AuthorSortParam })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Book.Title)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Book.Title).ToString(), "Index", new { sortOrder = ViewBag.TitleSortParam })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AmountOfPages)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.AmountOfPages).ToString(), "Index", new { sortOrder = ViewBag.PagesSortParam })
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {

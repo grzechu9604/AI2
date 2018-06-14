@@ -13,7 +13,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.User.Email)
+            @Html.ActionLink(Html.DisplayNameFor(model => model.User.Email).ToString(), "Index", new { sortOrder = ViewBag.MailSortParam })
         </th>
     </tr>
 

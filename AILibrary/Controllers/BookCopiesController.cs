@@ -30,9 +30,50 @@ namespace AILibrary.Controllers
 
         // GET: BookCopies
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder)
         {
-            return View(BookCopiesWithIncludes());
+            ViewBag.TitleSortParam = string.IsNullOrWhiteSpace(sortOrder) ? "title_desc" : "";
+            ViewBag.AuthorSortParam = sortOrder == "author" ? "author_desc" : "author";
+            ViewBag.PagesSortParam = sortOrder == "page" ? "page_desc" : "page";
+            ViewBag.PossesorSortParam = sortOrder == "possesor" ? "possesor_desc" : "possesor";
+            ViewBag.CurrentlyPossesed = sortOrder == "CurrentlyPossesed" ? "CurrentlyPossesed_desc" : "CurrentlyPossesed";
+
+            var bookCopies = BookCopiesWithIncludes().Select(b => b);
+
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    bookCopies = bookCopies.OrderByDescending(b => b.Book.Title);
+                    break;
+                case "author":
+                    bookCopies = bookCopies.OrderBy(b => b.Book.AuthorName);
+                    break;
+                case "author_desc":
+                    bookCopies = bookCopies.OrderByDescending(b => b.Book.AuthorName);
+                    break;
+                case "page":
+                    bookCopies = bookCopies.OrderBy(b => b.AmountOfPages);
+                    break;
+                case "page_desc":
+                    bookCopies = bookCopies.OrderByDescending(b => b.AmountOfPages);
+                    break;
+                case "possesor":
+                    bookCopies = bookCopies.OrderBy(b => b.Possesor.Email);
+                    break;
+                case "possesor_desc":
+                    bookCopies = bookCopies.OrderByDescending(b => b.Possesor.Email);
+                    break;
+                case "CurrentlyPossesed":
+                    bookCopies = bookCopies.OrderBy(b => b.CurrentlyPossesdByUser.Email);
+                    break;
+                case "CurrentlyPossesed_desc":
+                    bookCopies = bookCopies.OrderByDescending(b => b.CurrentlyPossesdByUser.Email);
+                    break;
+                default:
+                    bookCopies = bookCopies.OrderBy(b => b.Book.Title);
+                    break;
+            }
+            return View(bookCopies);
         }
 
         // GET: BookCopies/Details/5
