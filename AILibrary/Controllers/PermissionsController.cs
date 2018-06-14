@@ -118,9 +118,21 @@ namespace AILibrary.Controllers
         private IList<SelectListItem> PrepareUsersSelect()
         {
             var currentUserID = GetCurrentUser().Id;
+            var usersWithPermisions = UserIdsWithPermisions();
             return db.Users
-                .Where(u => !u.Id.Equals(currentUserID))
+                .Where(u => !u.Id.Equals(currentUserID) && !usersWithPermisions.Contains(u.Id))
                 .Select(u => new SelectListItem() { Text = u.Email, Value = u.Email })
+                .ToList();
+        }
+
+        private IList<string> UserIdsWithPermisions()
+        {
+            var currentLibraryID = GetCurretUsersLibrary().Id;
+            return db.Permissions
+                .Include(p => p.Library)
+                .Where(p => p.Library.Id.Equals(currentLibraryID))
+                .Include(p => p.User)
+                .Select(p => p.User.Id)
                 .ToList();
         }
 
