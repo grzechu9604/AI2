@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using AILibrary.Models;
 using AILibrary.Models.Books;
+using AILibrary.Models.Libraries;
 
 namespace AILibrary.Controllers
 {
@@ -193,7 +194,10 @@ namespace AILibrary.Controllers
 
         private IQueryable<BookCopy> BookCopiesWithIncludes()
         {
+            var librariesWithPrivileges = LibrariesWithPrivileges();
             return db.BookCopies
+                .Include(b => b.Library)
+                .Where(b => librariesWithPrivileges.Contains(b.Library.Id))
                 .Include(b => b.Book)
                 .Include(b => b.CurrentlyPossesdByUser)
                 .Include(b => b.Possesor);
@@ -203,6 +207,26 @@ namespace AILibrary.Controllers
         {
             ModelState.Remove("Book");
             ModelState.Remove("Possesor");
+        }
+
+        private IList<long> LibrariesWithPrivileges()
+        {
+            var userId = GetCurrentUser().Id;
+            var librariesWithPermission = db.Permissions
+                .Include(p => p.Library)
+                .Include(p => p.User)
+                .Where(p => p.User.Id.Equals(userId))
+                .Select(p => p.Library.Id)
+                .ToList();
+
+            librariesWithPermission.Add(GetCurretUsersLibrary().Id);
+            return librariesWithPermission;
+        }
+
+        private Library GetCurretUsersLibrary()
+        {
+            var libraryId = GetCurrentUser().Id;
+            return db.Libraries.Include(l => l.Possesor).First(l => l.Possesor.Id.Equals(libraryId));
         }
     }
 }
