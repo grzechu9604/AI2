@@ -22,11 +22,14 @@ namespace AILibrary.Controllers
 
         // GET: Permissions
         [Authorize]
-        public ActionResult Index(string sortOrder)
+        public ActionResult Index(string sortOrder, string emailSearchString)
         {
             ViewBag.MailSortParam = string.IsNullOrWhiteSpace(sortOrder) ? "mail_desc" : "";
 
-            var permissions = PermissionsWithIncludes().Select(p => p);
+            var permissions = PermissionsWithIncludes()
+                .ToList()
+                .Where(p => string.IsNullOrWhiteSpace(emailSearchString) || p.User.Email.ToLower().Contains(emailSearchString.ToLower()))
+                .Select(p => p);
 
             switch (sortOrder)
             {

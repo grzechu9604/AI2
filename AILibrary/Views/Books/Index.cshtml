@@ -10,6 +10,24 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td> Find by author name:</td>
+            <td> @Html.TextBox("nameSearchString")</td>
+        </tr>
+        <tr>
+            <td>Find by title:</td>
+            <td> @Html.TextBox("titleSearchString")</td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Search" /></td>
+        </tr>
+
+    </table>
+}
 <table class="table">
     <tr>
         <th>

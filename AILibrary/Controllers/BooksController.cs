@@ -19,11 +19,16 @@ namespace AILibrary.Controllers
 
         // GET: Books
         [Authorize]
-        public ActionResult Index(string sortOrder)
+        public ActionResult Index(string sortOrder, string titleSearchString, string nameSearchString)
         {
             ViewBag.TitleSortParam = string.IsNullOrWhiteSpace(sortOrder) ? "title_desc" : "";
             ViewBag.AuthorSortParam = sortOrder == "author" ? "author_desc" : "author";
-            var books = db.Books.Select(b => b);
+            var books = db.Books
+                .ToList()
+                .Where(b => (string.IsNullOrWhiteSpace(titleSearchString) || b.Title.ToLower().Contains(titleSearchString.ToLower()))
+                    && (string.IsNullOrWhiteSpace(nameSearchString) || b.AuthorName.ToLower().Contains(nameSearchString.ToLower())
+                    ))
+                .Select(b => b);
 
             switch (sortOrder)
             {

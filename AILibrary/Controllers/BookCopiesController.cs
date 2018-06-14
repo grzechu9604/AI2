@@ -30,7 +30,7 @@ namespace AILibrary.Controllers
 
         // GET: BookCopies
         [Authorize]
-        public ActionResult Index(string sortOrder)
+        public ActionResult Index(string sortOrder, string titleSearchString, string nameSearchString, string possesorNameSearchString, string currentlyNameSearchString)
         {
             ViewBag.TitleSortParam = string.IsNullOrWhiteSpace(sortOrder) ? "title_desc" : "";
             ViewBag.AuthorSortParam = sortOrder == "author" ? "author_desc" : "author";
@@ -38,7 +38,14 @@ namespace AILibrary.Controllers
             ViewBag.PossesorSortParam = sortOrder == "possesor" ? "possesor_desc" : "possesor";
             ViewBag.CurrentlyPossesed = sortOrder == "CurrentlyPossesed" ? "CurrentlyPossesed_desc" : "CurrentlyPossesed";
 
-            var bookCopies = BookCopiesWithIncludes().Select(b => b);
+            var bookCopies = BookCopiesWithIncludes()
+                .ToList()
+                .Where(b => (string.IsNullOrWhiteSpace(titleSearchString) || b.Book.Title.ToLower().Contains(titleSearchString.ToLower()))
+                    && (string.IsNullOrWhiteSpace(nameSearchString) || b.Book.AuthorName.ToLower().Contains(nameSearchString.ToLower()))
+                    && (string.IsNullOrWhiteSpace(currentlyNameSearchString) || (b.CurrentlyPossesdByUser != null &&  b.CurrentlyPossesdByUser.Email.ToLower().Contains(currentlyNameSearchString.ToLower())))
+                    && (string.IsNullOrWhiteSpace(possesorNameSearchString) || b.Possesor.Email.ToLower().Contains(possesorNameSearchString.ToLower()))
+                    )
+                .Select(b => b);
 
             switch (sortOrder)
             {
