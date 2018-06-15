@@ -34,51 +34,8 @@
             <td><input type="submit" value="Search" /></td>
         </tr>
 
-</table>
+    </table>
 }
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Possesor).ToString(), "Index", new { sortOrder = ViewBag.PossesorSortParam })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.CurrentlyPossesdByUser).ToString(), "Index", new { sortOrder = ViewBag.CurrentlyPossesed })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Book.AuthorName).ToString(), "Index", new { sortOrder = ViewBag.AuthorSortParam })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Book.Title).ToString(), "Index", new { sortOrder = ViewBag.TitleSortParam })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.AmountOfPages).ToString(), "Index", new { sortOrder = ViewBag.PagesSortParam })
-        </th>
-    </tr>
+@Html.Partial("_BookCopiesList", Model)
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Possesor.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CurrentlyPossesdByUser.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Book.AuthorName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Book.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AmountOfPages)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>

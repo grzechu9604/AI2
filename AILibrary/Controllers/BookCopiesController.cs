@@ -80,6 +80,7 @@ namespace AILibrary.Controllers
                     bookCopies = bookCopies.OrderBy(b => b.Book.Title);
                     break;
             }
+            AddUserIdToSession();
             return View(bookCopies);
         }
 
@@ -186,8 +187,8 @@ namespace AILibrary.Controllers
         }
 
         // POST: BookCopies/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         [Authorize]
         public ActionResult DeleteConfirmed(long id)
         {
@@ -195,6 +196,46 @@ namespace AILibrary.Controllers
             db.BookCopies.Remove(bookCopy);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // POST: BookCopies/Borrow/5
+        //[HttpPost, ActionName("Borrow")]
+        //[ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult Borrow(long id)
+        {
+            BookCopy bookCopy = BookCopiesWithIncludes().First(bc => bc.Id.Equals(id));
+            bookCopy.CurrentlyPossesdByUser = GetCurrentUser();
+            db.Entry(bookCopy).State = EntityState.Modified;
+            db.SaveChanges();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_BookCopiesList", BookCopiesWithIncludes());
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        // POST: BookCopies/GiveBack/5
+        //[HttpPost, ActionName("GiveBack")]
+        //[ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult GiveBack(long id)
+        {
+            BookCopy bookCopy = BookCopiesWithIncludes().First(bc => bc.Id.Equals(id)); ;
+            bookCopy.CurrentlyPossesdByUser = null;
+            db.Entry(bookCopy).State = EntityState.Modified;
+            db.SaveChanges();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_BookCopiesList", BookCopiesWithIncludes());
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -275,6 +316,11 @@ namespace AILibrary.Controllers
         {
             var libraryId = GetCurrentUser().Id;
             return db.Libraries.Include(l => l.Possesor).First(l => l.Possesor.Id.Equals(libraryId));
+        }
+
+        private void AddUserIdToSession()
+        {
+            Session["UserID"] = GetCurrentUser().Id;
         }
     }
 }

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<AILibrary.Models.Books.BookCopy>
+
+<table class="table" id="bookCopiesList">
+    <tr>
+        <th>
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Possesor).ToString(), "Index", new { sortOrder = ViewBag.PossesorSortParam })
+        </th>
+        <th>
+            @Html.ActionLink(Html.DisplayNameFor(model => model.CurrentlyPossesdByUser).ToString(), "Index", new { sortOrder = ViewBag.CurrentlyPossesed })
+        </th>
+        <th>
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Book.AuthorName).ToString(), "Index", new { sortOrder = ViewBag.AuthorSortParam })
+        </th>
+        <th>
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Book.Title).ToString(), "Index", new { sortOrder = ViewBag.TitleSortParam })
+        </th>
+        <th>
+            @Html.ActionLink(Html.DisplayNameFor(model => model.AmountOfPages).ToString(), "Index", new { sortOrder = ViewBag.PagesSortParam })
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Possesor.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentlyPossesdByUser.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.AuthorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AmountOfPages)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                @if (item.Possesor.Id.Equals(Session["UserID"]))
+                {
+                    <text> | </text>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id });
+                    <text> | </text>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id });
+                }
+                else if (item.CurrentlyPossesdByUser == null)
+                {
+                    <text> | </text>
+                    @Ajax.ActionLink("Borrow", "Borrow", new { id = item.Id }, new AjaxOptions()
+               {
+                   HttpMethod = "Borrow",
+                   Confirm = "Are you sure you want to borrow this book copy?",
+                   UpdateTargetId = "bookCopiesList"
+               })
+
+                }
+                else if (item.CurrentlyPossesdByUser.Id.Equals(Session["UserID"]))
+                {
+                    <text> | </text>
+                    @Ajax.ActionLink("Give back", "GiveBack", new { id = item.Id }, new AjaxOptions()
+               {
+                   HttpMethod = "GiveBack",
+                   Confirm = "Are you sure you want to give back this book copy?",
+                   UpdateTargetId = "bookCopiesList"
+               });
+                }
+            </td>
+        </tr>
+    }
+
+</table>
